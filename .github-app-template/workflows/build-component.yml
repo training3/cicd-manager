@@ -4,9 +4,14 @@ on:
     branch: development
   workflow_dispatch:
 jobs:
+  steps:
+  - id: setup-environment
+    name: setup-environment
+    run: |
+      echo "CICD_TOKEN=$(cat /var/secrets/PAT_TOKEN)" >> ${GITHUB_ENV}
   build-and-deploy:
     uses: nicks-world/cicd-manager.github/workflows/build-and-deploy.yml@master
     with:
       system-name: %SYSTEM_NAME%
     secrets:
-      CICD_TOKEN: ${{ secrets.CICD_TOKEN }}
+      CICD_TOKEN: ${{ env.CICD_TOKEN }}
