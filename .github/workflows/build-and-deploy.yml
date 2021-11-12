@@ -24,6 +24,7 @@ jobs:
       name: clone-cicd-manager-repo
       uses: actions/checkout@v2
       with:
+        repository: nicks-world/cicd-manager
         ref: main
         path: ${{ env.CICD_REPO_MGR_DIR }}
         token: ${{env.CICD_TOKEN }}
