@@ -6,9 +6,7 @@ components:
   - repo: cicd-poc-app-2
     codebase: java11
     status: active
-environments:
-  - dev
+test-environments:
   - qa
   - uat
   - stg
-  - prod
