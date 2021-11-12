@@ -23,7 +23,7 @@ jobs:
       name: clone-cicd-manager-repo
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: main
         path: ${{ env.CICD_REPO_MGR_DIR }}
     - id: parse-system-def
       name: parse-system-def
@@ -55,14 +55,14 @@ jobs:
         name: clone-cicd-manager-repo
         uses: actions/checkout@v2
         with:
-          ref: master
+          ref: main
           path: ${{ env.CICD_REPO_MGR_DIR }}
       - id: clone-app-repo
         name: clone-app-repo
         uses: actions/checkout@v2
         with:
           repository: ${{ matrix.system-repo }}
-          ref: master
+          ref: main
           path: ${{ env.WORKING_DIR }}
           token: ${{ needs.gather-system-info.outputs.CICD_TOKEN }}
       - id: install-github-workflow-directory

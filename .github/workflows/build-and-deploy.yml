@@ -15,6 +15,7 @@ jobs:
       name: setup-environment
       run: |
         set -x
+        echo "WORKING_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY}" >> ${GITHUB_ENV}
         echo "CICD_REPO_MGR_DIR=${GITHUB_WORKSPACE}/cicd-manager" >> ${GITHUB_ENV}
         echo "SYSTEM_DEFS_DIR=${GITHUB_WORKSPACE}/cicd-manager/.github/system-defs" >> ${GITHUB_ENV}
         set +x
@@ -22,7 +23,7 @@ jobs:
       name: clone-cicd-manager-repo
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: main
         path: ${{ env.CICD_REPO_MGR_DIR }}
     - id: parse-system-def
       name: parse-system-def
@@ -31,6 +32,12 @@ jobs:
         TEST_ENVIRONMENTS=$(yq e '[.test-environments]' "${SYSTEM_DEFS_FILE}" -o json)
         echo "TEST_ENVIRONMENTS: ${TEST_ENVIRONMENTS}"
         echo ::set-output name=test-environments::$(echo ${TEST_ENVIRONMENTS})
+    - id: clone-app-repo
+      name: clone-app-repo
+      uses: actions/checkout@v2
+      with:
+        ref: main
+        path: ${{ env.WORKING_DIR }}
     - id: build
       name: build
       run: |
