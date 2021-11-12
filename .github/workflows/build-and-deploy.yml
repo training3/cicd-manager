@@ -35,7 +35,7 @@ jobs:
         SYSTEM_DEFS_FILE=$(ls ${SYSTEM_DEFS_DIR}/${SYSTEM_NAME}.y*)
         ENVIRONMENTS=$(yq e '.test-environments' "${SYSTEM_DEFS_FILE}" -o json)
         echo "ENVIRONMENTS: ${ENVIRONMENTS}"
-        echo ::set-output name=environments::$(echo ${ENVIRONMENTS})
+        echo ::set-output name=test-environments::$(echo ${ENVIRONMENTS})
     - id: clone-app-repo
       name: clone-app-repo
       uses: actions/checkout@v2
@@ -73,7 +73,7 @@ jobs:
         echo
         echo "pushing image..."
     outputs:
-      environments: ${{ steps.parse-system-def.outputs.test-environments }}
+      test-environments: ${{ steps.parse-system-def.outputs.test-environments }}
   deploy-image-to-dev:
     runs-on: dev.mdw.nicks.world
     needs: build-test-scan-create-image

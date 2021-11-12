@@ -4,17 +4,7 @@ on:
     branch: development
   workflow_dispatch:
 jobs:
-  setup-environment:
-    runs-on: build.mdw.nicks.world
-    steps:
-    - id: setup-environment
-      name: setup-environment
-      run: |
-        echo ::set-secret name=PAT_TOKEN::$(cat /var/secrets/PAT_TOKEN)
   build-and-deploy:
-    needs: setup-environment
     uses: nicks-world/cicd-manager/.github/workflows/build-and-deploy.yml@main
     with:
       system-name: %SYSTEM_NAME%
-    secrets:
-      PAT_TOKEN: ${{ needs.setup-environment.outputs.PAT_TOKEN }}
