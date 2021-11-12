@@ -15,8 +15,8 @@ jobs:
       name: setup-environment
       run: |
         set -x
-        echo "CICD_REPO_MGR_DIR=${GITHUB_WORKSPACE}/cicd-poc-mgr" >> ${GITHUB_ENV}
-        echo "SYSTEM_DEFS_DIR=${GITHUB_WORKSPACE}/cicd-poc-mgr/.github/system-defs" >> ${GITHUB_ENV}
+        echo "CICD_REPO_MGR_DIR=${GITHUB_WORKSPACE}/cicd-manager" >> ${GITHUB_ENV}
+        echo "SYSTEM_DEFS_DIR=${GITHUB_WORKSPACE}/cicd-manager/.github/system-defs" >> ${GITHUB_ENV}
         set +x
     - id: clone-cicd-manager-repo
       name: clone-cicd-manager-repo
