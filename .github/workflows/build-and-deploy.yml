@@ -29,7 +29,7 @@ jobs:
       name: parse-system-def
       run: |
         SYSTEM_DEFS_FILE=$(ls ${SYSTEM_DEFS_DIR}/${SYSTEM_NAME}.y*)
-        TEST_ENVIRONMENTS=$(yq e '[.test-environments]' "${SYSTEM_DEFS_FILE}" -o json)
+        TEST_ENVIRONMENTS=$(yq e '[.test-environments]' "${SYSTEM_DEFS_FILE}" -j)
         echo "TEST_ENVIRONMENTS: ${TEST_ENVIRONMENTS}"
         echo ::set-output name=test-environments::$(echo ${TEST_ENVIRONMENTS})
     - id: clone-app-repo
