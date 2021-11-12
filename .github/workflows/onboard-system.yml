@@ -47,7 +47,7 @@ jobs:
         run: |
           set -x
           echo "WORKING_DIR=${GITHUB_WORKSPACE}/${{ matrix.component-repo }}" >> ${GITHUB_ENV}
-          PAT_TOKEN=$(cat /var/secrets/PAT_TOKEN)
+          echo "PAT_TOKEN=$(cat /var/secrets/PAT_TOKEN)" >> ${GITHUB_ENV}
           set +x
       - id: clone-cicd-manager-repo
         name: clone-cicd-manager-repo
