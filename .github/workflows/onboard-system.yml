@@ -30,11 +30,9 @@ jobs:
         REPO_NAMES=$(yq e '[.organization + "/" + .components[].repo]' "${SYSTEM_DEFS_FILE}" -o json)
         echo "REPO_NAMES: ${REPO_NAMES}"
         echo ::set-output name=component-repos::$(echo ${REPO_NAMES})
-        echo ::set-output name=PAT_TOKEN::$(cat /var/secrets/PAT_TOKEN)
     outputs:
       component-repos: ${{ steps.parse-system-def.outputs.component-repos }}
       CICD_REPO_MGR_DIR: ${{ env.CICD_REPO_MGR_DIR }}
-      PAT_TOKEN: ${{ steps.setup-environment.outputs.PAT_TOKEN }}
   onboard-system:
     runs-on: build.mdw.nicks.world
     needs: gather-system-info
@@ -49,6 +47,7 @@ jobs:
         run: |
           set -x
           echo "WORKING_DIR=${GITHUB_WORKSPACE}/${{ matrix.component-repo }}" >> ${GITHUB_ENV}
+          PAT_TOKEN=$(cat /var/secrets/PAT_TOKEN)
           set +x
       - id: clone-cicd-manager-repo
         name: clone-cicd-manager-repo
@@ -63,7 +62,7 @@ jobs:
           repository: ${{ matrix.component-repo }}
           ref: main
           path: ${{ env.WORKING_DIR }}
-          token: ${{ needs.gather-system-info.outputs.PAT_TOKEN }}
+          token: ${{ env.PAT_TOKEN }}
       - id: install-github-workflow-directory
         name: install-github-workflow-directory
         run: |
