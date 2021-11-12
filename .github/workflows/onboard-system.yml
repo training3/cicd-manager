@@ -35,7 +35,6 @@ jobs:
     outputs:
       system-repo-names: ${{ steps.parse-system-def.outputs.system-repo-names }}
       CICD_REPO_MGR_DIR: ${{ env.CICD_REPO_MGR_DIR }}
-      CICD_TOKEN: ${{ steps.setup-environment.outputs.secret-token }}
   onboard-system:
     runs-on: build.mdw.nicks.world
     needs: gather-system-info
@@ -50,6 +49,7 @@ jobs:
         run: |
           set -x
           echo "WORKING_DIR=${GITHUB_WORKSPACE}/${{ matrix.system-repo }}" >> ${GITHUB_ENV}
+          echo "CICD_TOKEN=$(cat /var/secrets/PAT_TOKEN)" >> ${GITHUB_ENV}
           set +x
       - id: clone-cicd-manager-repo
         name: clone-cicd-manager-repo
@@ -64,7 +64,7 @@ jobs:
           repository: ${{ matrix.system-repo }}
           ref: main
           path: ${{ env.WORKING_DIR }}
-          token: ${{ needs.gather-system-info.outputs.CICD_TOKEN }}
+          token: ${{ env.CICD_TOKEN }}
       - id: install-github-workflow-directory
         name: install-github-workflow-directory
         run: |
