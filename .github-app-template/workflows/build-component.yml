@@ -12,11 +12,11 @@ jobs:
       run: |
         echo ::set-output name=CICD_TOKEN::$(cat /var/secrets/PAT_TOKEN)
     outputs:
-      matrix: ${{ steps.setup-environment.outputs.CICD_TOKEN }}
+      matrix: ${{ steps.setup-environment.outputs.PAT_TOKEN }}
   build-and-deploy:
     needs: setup-environment
     uses: nicks-world/cicd-manager.github/workflows/build-and-deploy.yml@master
     with:
       system-name: %SYSTEM_NAME%
     secrets:
-      CICD_TOKEN: ${{ needs.setup-environment.outputs.CICD_TOKEN }}
+      CICD_TOKEN: ${{ needs.setup-environment.outputs.PAT_TOKEN }}
