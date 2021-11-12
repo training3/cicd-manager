@@ -2,44 +2,46 @@ name: build-and-deploy
 on:
   workflow_call:
     inputs:
-      env-to:
-        required: false
+      system-name:
+        required: true
         type: string
+    secrets:
+      CICD_TOKEN:
+        required: true
 jobs:
-  build-test-scan-to-image:
-    outputs:
-      matrix: ${{ steps.collect-envs.outputs.matrix }}
-    runs-on: dev.mdw.nicks.world
+  build-test-scan-create-image:
+    runs-on: build.mdw.nicks.world
+    env:
+      SYSTEM_NAME: ${{ inputs.system-name }}
     steps:
     - id: setup-environment
       name: setup-environment
       run: |
         set -x
-        echo "WORKING_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY}" >> ${GITHUB_ENV}
         echo "CICD_REPO_MGR_DIR=${GITHUB_WORKSPACE}/cicd-manager" >> ${GITHUB_ENV}
         echo "SYSTEM_DEFS_DIR=${GITHUB_WORKSPACE}/cicd-manager/.github/system-defs" >> ${GITHUB_ENV}
-        echo "CICD_TOKEN=$(cat /var/secrets/PAT_TOKEN)" >> ${GITHUB_ENV}
+        echo "WORKING_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY}" >> ${GITHUB_ENV}
         set +x
     - id: clone-cicd-manager-repo
       name: clone-cicd-manager-repo
       uses: actions/checkout@v2
       with:
         repository: nicks-world/cicd-manager
-        ref: main
+        ref: master
         path: ${{ env.CICD_REPO_MGR_DIR }}
-        token: ${{env.CICD_TOKEN }}
+        token: ${{ secrets.CICD_TOKEN }}
     - id: parse-system-def
       name: parse-system-def
       run: |
         SYSTEM_DEFS_FILE=$(ls ${SYSTEM_DEFS_DIR}/${SYSTEM_NAME}.y*)
-        TEST_ENVIRONMENTS=$(yq e '[.test-environments]' "${SYSTEM_DEFS_FILE}" -o json)
-        echo "TEST_ENVIRONMENTS: ${TEST_ENVIRONMENTS}"
-        echo ::set-output name=test-environments::$(echo ${TEST_ENVIRONMENTS})
+        ENVIRONMENTS=$(yq e '.test-environments' "${SYSTEM_DEFS_FILE}" -j)
+        echo "ENVIRONMENTS: ${ENVIRONMENTS}"
+        echo ::set-output name=environments::$(echo ${ENVIRONMENTS})
     - id: clone-app-repo
       name: clone-app-repo
       uses: actions/checkout@v2
       with:
-        ref: main
+        ref: master
         path: ${{ env.WORKING_DIR }}
     - id: build
       name: build
@@ -71,37 +73,38 @@ jobs:
       run: |
         echo
         echo "pushing image..."
+    outputs:
+      environments: ${{ steps.parse-system-def.outputs.test-environments }}
   deploy-image-to-dev:
-    if: matrix.environment == 'dev'
     runs-on: dev.mdw.nicks.world
-    needs: build-test-scan-to-image
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: dev
+    needs: build-test-scan-create-image
+    env:
+        ENVIRONMENT: dev
     steps:
     - id: deploy
       name: deploy
       run: |
         echo
-        echo "deploying to dev..."
+        echo "deploying to ${{ env.ENVIRONMENT }}..."
     - id: verify-deployment
       name: verify-deployment
       run: |
         echo
-        echo "verifying deployment in dev..."
+        echo "verifying deployment in ${{ env.ENVIRONMENT }}..."
     - id: publish-results
       name: publish-results
       run: |
         echo
-        echo "publishing results for dev..."
-  deploy-image-to-test:
+        echo "publishing results for ${{ env.ENVIRONMENT }}..."
+  deploy-image-to-test-envs:
     runs-on: test.mdw.nicks.world
-    needs: [build-test-scan-to-image, deploy-image-to-dev]
+    needs: 
+      - build-test-scan-create-image
+      - deploy-image-to-dev
     strategy:
       max-parallel: 1
       matrix:
-        test-environment: ${{ fromJSON(needs.build-test-scan-to-image.outputs.test-environments) }}
+        test-environment: ${{ fromJSON(needs.build-test-scan-create-image.outputs.test-environments) }}
     steps:
     - id: deploy
       name: deploy

@@ -3,12 +3,10 @@ on:
   push:
     branch: development
   workflow_dispatch:
-    inputs:
-      env-to:
-        description: 'env-to: Use only if building and deploying to a sandbox for testing'
-        required: false
 jobs:
   build-and-deploy:
-    uses: hippyod/cicd-poc-mgr/.github/workflows/build-and-deploy.yml@master
+    uses: nicks-world/cicd-manager.github/workflows/build-and-deploy.yml@master
     with:
-      env-to: ${{ github.event.inputs.env-to }}
+      system-name: %SYSTEM_NAME%
+    secrets:
+      CICD_TOKEN: ${{ secrets.CICD_TOKEN }}

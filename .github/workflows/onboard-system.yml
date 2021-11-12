@@ -17,23 +17,21 @@ jobs:
         echo "CICD_REPO_MGR_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY}" >> ${GITHUB_ENV}
         echo "SYSTEM_DEFS_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY}/.github/system-defs" >> ${GITHUB_ENV}
         set +x
-
-        echo ::set-output name=secret-token::$(cat /var/secrets/PAT_TOKEN) 
     - id: clone-cicd-manager-repo
       name: clone-cicd-manager-repo
       uses: actions/checkout@v2
       with:
-        ref: main
+        ref: master
         path: ${{ env.CICD_REPO_MGR_DIR }}
     - id: parse-system-def
       name: parse-system-def
       run: |
         SYSTEM_DEFS_FILE=$(ls ${SYSTEM_DEFS_DIR}/${SYSTEM_NAME}.y*)
-        REPO_NAMES=$(yq e '[.organization + "/" + .components[].repo]' "${SYSTEM_DEFS_FILE}" -j)
+        REPO_NAMES=$(yq e '[.organization + "/" + .components[].repo]' "${SYSTEM_DEFS_FILE}" -o json)
         echo "REPO_NAMES: ${REPO_NAMES}"
-        echo ::set-output name=system-repo-names::$(echo ${REPO_NAMES})
+        echo ::set-output name=matrix::$(echo ${REPO_NAMES})
     outputs:
-      system-repo-names: ${{ steps.parse-system-def.outputs.system-repo-names }}
+      matrix: ${{ steps.parse-system-def.outputs.matrix }}
       CICD_REPO_MGR_DIR: ${{ env.CICD_REPO_MGR_DIR }}
   onboard-system:
     runs-on: build.mdw.nicks.world
@@ -42,35 +40,38 @@ jobs:
       CICD_REPO_MGR_DIR: ${{ needs.gather-system-info.outputs.CICD_REPO_MGR_DIR }}
     strategy:
       matrix:
-        system-repo: ${{ fromJSON(needs.gather-system-info.outputs.system-repo-names) }}
+        system-repo: ${{ fromJSON(needs.gather-system-info.outputs.matrix) }}
     steps:
       - id: setup-environment
         name: setup-environment
         run: |
           set -x
           echo "WORKING_DIR=${GITHUB_WORKSPACE}/${{ matrix.system-repo }}" >> ${GITHUB_ENV}
-          echo "CICD_TOKEN=$(cat /var/secrets/PAT_TOKEN)" >> ${GITHUB_ENV}
           set +x
       - id: clone-cicd-manager-repo
         name: clone-cicd-manager-repo
         uses: actions/checkout@v2
         with:
-          ref: main
+          ref: master
           path: ${{ env.CICD_REPO_MGR_DIR }}
       - id: clone-app-repo
         name: clone-app-repo
         uses: actions/checkout@v2
         with:
           repository: ${{ matrix.system-repo }}
-          ref: main
+          ref: master
           path: ${{ env.WORKING_DIR }}
-          token: ${{ env.CICD_TOKEN }}
+          token: ${{ secrets.CICD_TOKEN }}
       - id: install-github-workflow-directory
         name: install-github-workflow-directory
         run: |
           set -x
           rm -rf ${WORKING_DIR}/.github
           cp -R ${CICD_REPO_MGR_DIR}/.github-app-template ${WORKING_DIR}/.github
+
+          find ${WORKING_DIR}/.github/workflows/ -type f \( -iname \*.yml -o -iname \*.yaml \) \
+            -exec sed -i -e's/%SYSTEM_NAME%/${{ github.event.inputs.system-name }}/g' {} +
+
           if [[ ! -z "$(git -C ${WORKING_DIR} status --porcelain)" ]]
           then
               git -C ${WORKING_DIR} config user.email ${cicd-team@my-org.com}
