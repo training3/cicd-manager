@@ -1,0 +1,14 @@
+name: build-component
+on:
+  push:
+    branch: development
+  workflow_dispatch:
+    inputs:
+      env-to:
+        description: 'env-to: Use only if building and deploying to a sandbox for testing'
+        required: false
+jobs:
+  build-and-deploy:
+    uses: hippyod/cicd-poc-mgr/.github/workflows/build-and-deploy.yml@master
+    with:
+      env-to: ${{ github.event.inputs.env-to }}
