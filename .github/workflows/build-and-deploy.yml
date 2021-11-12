@@ -5,9 +5,6 @@ on:
       system-name:
         required: true
         type: string
-    secrets:
-      PAT_TOKEN:
-        required: true
 jobs:
   build-test-scan-create-image:
     runs-on: build.mdw.nicks.world
@@ -21,6 +18,8 @@ jobs:
         echo "CICD_REPO_MGR_DIR=${GITHUB_WORKSPACE}/cicd-manager" >> ${GITHUB_ENV}
         echo "SYSTEM_DEFS_DIR=${GITHUB_WORKSPACE}/cicd-manager/.github/system-defs" >> ${GITHUB_ENV}
         echo "WORKING_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY}" >> ${GITHUB_ENV}
+        echo ::add-mask::$(cat var/secrets/PAT_TOKEN)
+        echo "PAT_TOKEN=$(cat var/secrets/PAT_TOKEN)" >> ${GITHUB_ENV}
         set +x
     - id: clone-cicd-manager-repo
       name: clone-cicd-manager-repo
@@ -29,7 +28,7 @@ jobs:
         repository: nicks-world/cicd-manager
         ref: main
         path: ${{ env.CICD_REPO_MGR_DIR }}
-        token: ${{ secrets.PAT_TOKEN }}
+        token: ${{ env.PAT_TOKEN }}
     - id: parse-system-def
       name: parse-system-def
       run: |
