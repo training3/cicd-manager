@@ -10,7 +10,7 @@ jobs:
     - id: setup-environment
       name: setup-environment
       run: |
-        echo ::set-output name=CICD_TOKEN::$(cat /var/secrets/PAT_TOKEN)
+        echo ::set-output name=PAT_TOKEN::$(cat /var/secrets/PAT_TOKEN)
     outputs:
       matrix: ${{ steps.setup-environment.outputs.PAT_TOKEN }}
   build-and-deploy:
