@@ -6,7 +6,7 @@ on:
         required: true
         type: string
     secrets:
-      CICD_TOKEN:
+      PAT_TOKEN:
         required: true
 jobs:
   build-test-scan-create-image:
@@ -29,7 +29,7 @@ jobs:
         repository: nicks-world/cicd-manager
         ref: main
         path: ${{ env.CICD_REPO_MGR_DIR }}
-        token: ${{ secrets.CICD_TOKEN }}
+        token: ${{ secrets.PAT_TOKEN }}
     - id: parse-system-def
       name: parse-system-def
       run: |
