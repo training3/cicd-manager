@@ -10,9 +10,7 @@ jobs:
     - id: setup-environment
       name: setup-environment
       run: |
-        echo ::set-output name=PAT_TOKEN::$(cat /var/secrets/PAT_TOKEN)
-    outputs:
-      PAT_TOKEN: ${{ steps.setup-environment.outputs.PAT_TOKEN }}
+        echo ::set-secret name=PAT_TOKEN::$(cat /var/secrets/PAT_TOKEN)
   build-and-deploy:
     needs: setup-environment
     uses: nicks-world/cicd-manager/.github/workflows/build-and-deploy.yml@main
