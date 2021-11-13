@@ -14,13 +14,19 @@ on:
         type: string
         default: dev
 jobs:
-  deploy-to-env:
+  promote-and-deploy:
     runs-on: ${{ inputs.cluster }}.mdw.nicks.world
     strategy:
       max-parallel: 1
       matrix:
-        test-environment: ${{ fromJSON(inputs.environments) }}
+        environment: ${{ fromJSON(inputs.environments) }}
     steps:
+    - id: promote
+      if: matrix.environment != 'dev'
+      name: promote
+      run: |
+        echo
+        echo "deploying to ${{ matrix.environment }}..."
     - id: deploy
       name: deploy
       run: |
