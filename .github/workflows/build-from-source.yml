@@ -41,28 +41,7 @@ jobs:
       name: clone-app-repo
       uses: actions/checkout@v2
       with:
-        
-  deploy-to-dev:
-    runs-on: dev.mdw.nicks.world
-    needs: build-test-scan-create-image
-    env:
-        ENVIRONMENT: dev
-    steps:
-    - id: deploy
-      name: deploy
-      run: |
-        echo
-        echo "deploying to ${{ env.ENVIRONMENT }}..."
-    - id: verify-deployment
-      name: verify-deployment
-      run: |
-        echo
-        echo "verifying deployment in ${{ env.ENVIRONMENT }}..."
-    - id: publish-results
-      name: publish-results
-      run: |
-        echo
-        echo "publishing results for ${{ env.ENVIRONMENT }}..."ref: main
+        ref: main
         path: ${{ env.WORKING_DIR }}
     - id: build
       name: build
