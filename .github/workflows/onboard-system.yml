@@ -67,11 +67,12 @@ jobs:
         name: install-github-workflow-directory
         run: |
           set -ex
-          git -C ${WORKING_DIR} rm -r ${WORKING_DIR}/.github 2> /dev/null || :
+          rm -rf ${WORKING_DIR}/.github
           cp -R ${CICD_REPO_MGR_DIR}/.github-app-template ${WORKING_DIR}/.github
 
           find ${WORKING_DIR}/.github/workflows/ -type f \( -iname \*.yml -o -iname \*.yaml \) \
             -exec sed -i -e's/%SYSTEM_NAME%/${{ github.event.inputs.system-name }}/g' {} +
+          git -C ${WORKING_DIR} add -u
 
           if [[ ! -z "$(git -C ${WORKING_DIR} status --porcelain)" ]]
           then
