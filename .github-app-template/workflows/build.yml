@@ -16,8 +16,6 @@ jobs:
   gather-test-environments:
     needs: deploy-to-dev
     runs-on: build.mdw.nicks.world
-    env:
-      SYSTEM_NAME: ${{ inputs.system-name }}
     steps:
     - id: setup-environment
       name: setup-environment
@@ -41,7 +39,7 @@ jobs:
     - id: parse-system-def
       name: parse-system-def
       run: |
-        SYSTEM_DEFS_FILE=$(ls ${SYSTEM_DEFS_DIR}/${SYSTEM_NAME}.y*)
+        SYSTEM_DEFS_FILE=$(ls ${SYSTEM_DEFS_DIR}/%SYSTEM_NAME%.y*)
         ENVIRONMENTS=$(yq e '.test-environments' "${SYSTEM_DEFS_FILE}" -o json)
         echo "ENVIRONMENTS: ${ENVIRONMENTS}"
         echo ::set-output name=test-environments::$(echo ${ENVIRONMENTS})
