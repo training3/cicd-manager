@@ -1,0 +1,96 @@
+name: build-from-source
+on:
+  workflow_call:
+    inputs:
+      system-name:
+        required: true
+        type: string
+jobs:
+  build-to-image:
+    runs-on: build.mdw.nicks.world
+    env:
+      SYSTEM_NAME: ${{ inputs.system-name }}
+    steps:
+    - id: setup-environment
+      name: setup-environment
+      run: |
+        set -x
+        echo "CICD_REPO_MGR_DIR=${GITHUB_WORKSPACE}/cicd-manager" >> ${GITHUB_ENV}
+        echo "SYSTEM_DEFS_DIR=${GITHUB_WORKSPACE}/cicd-manager/.github/system-defs" >> ${GITHUB_ENV}
+        echo "WORKING_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY}" >> ${GITHUB_ENV}
+        set +x
+
+        echo ::add-mask::$(cat /var/secrets/PAT_TOKEN)
+        echo "PAT_TOKEN=$(cat /var/secrets/PAT_TOKEN)" >> ${GITHUB_ENV}
+    - id: clone-cicd-manager-repo
+      name: clone-cicd-manager-repo
+      uses: actions/checkout@v2
+      with:
+        repository: nicks-world/cicd-manager
+        ref: main
+        path: ${{ env.CICD_REPO_MGR_DIR }}
+        token: ${{ env.PAT_TOKEN }}
+    - id: parse-system-def
+      name: parse-system-def
+      run: |
+        SYSTEM_DEFS_FILE=$(ls ${SYSTEM_DEFS_DIR}/${SYSTEM_NAME}.y*)
+        CODEBASE=$(yq e ".components[] | select(.repo == \"${SYSTEM_NAME}\") | .codebase" ${SYSTEM_DEFS_FILE} -o json)
+        echo "CODEBASE: ${CODEBASE}"
+        echo ::set-output name=codebase::$(echo ${CODEBASE})
+    - id: clone-app-repo
+      name: clone-app-repo
+      uses: actions/checkout@v2
+      with:
+        
+  deploy-to-dev:
+    runs-on: dev.mdw.nicks.world
+    needs: build-test-scan-create-image
+    env:
+        ENVIRONMENT: dev
+    steps:
+    - id: deploy
+      name: deploy
+      run: |
+        echo
+        echo "deploying to ${{ env.ENVIRONMENT }}..."
+    - id: verify-deployment
+      name: verify-deployment
+      run: |
+        echo
+        echo "verifying deployment in ${{ env.ENVIRONMENT }}..."
+    - id: publish-results
+      name: publish-results
+      run: |
+        echo
+        echo "publishing results for ${{ env.ENVIRONMENT }}..."ref: main
+        path: ${{ env.WORKING_DIR }}
+    - id: build
+      name: build
+      run: |
+        echo
+        echo "building using ${{ steps.parse-system-defs.outputs.codebase}}..."
+    - id: test
+      name: test
+      run: |
+        echo
+        echo "testing..."
+    - id: scan
+      name: scan
+      run: |
+        echo
+        echo "scanning..."
+    - id: build-image
+      name: build-image
+      run: |
+        echo
+        echo "building image..."
+    - id: scan-image
+      name: scan-image
+      run: |
+        echo
+        echo "scanning image..."
+    - id: push-image
+      name: push-image
+      run: |
+        echo
+        echo "pushing image..."
