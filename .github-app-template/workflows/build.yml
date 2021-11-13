@@ -4,12 +4,12 @@ on:
     branch: development
   workflow_dispatch:
 jobs:
-  build-image:
+  build-from-source:
     uses: nicks-world/cicd-manager/.github/workflows/build-from-source.yml@main
     with:
       system-name: %SYSTEM_NAME%
   deploy-to-dev:
-    needs: build
+    needs: build-from-source
     uses: nicks-world/cicd-manager/.github/workflows/promote.yml@main
     with:
       system-name: %SYSTEM_NAME%
