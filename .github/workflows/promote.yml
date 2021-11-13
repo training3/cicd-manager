@@ -1,0 +1,34 @@
+name: promote
+on:
+  workflow_call:
+    inputs:
+      system-name:
+        required: true
+        type: string
+      environments:
+        required: true
+        type: string
+        default: '["dev"]'
+jobs:
+  deploy-to-env:
+    runs-on: test.mdw.nicks.world
+    strategy:
+      max-parallel: 1
+      matrix:
+        test-environment: ${{ fromJSON(inputs.environments) }}
+    steps:
+    - id: deploy
+      name: deploy
+      run: |
+        echo
+        echo "deploying to ${{ matrix.environment }}..."
+    - id: verify-deployment
+      name: verify-deployment
+      run: |
+        echo
+        echo "verifying deployment in ${{ matrix.environment }}..."
+    - id: publish-results
+      name: publish-results
+      run: |
+        echo
+        echo "publishing results for ${{ matrix.environment }}..."
