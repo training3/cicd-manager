@@ -48,7 +48,7 @@ jobs:
     outputs:
       test-environments: ${{ steps.parse-system-def.outputs.test-environments }}
   deploy-to-test:
-    needs: gather-environments
+    needs: gather-test-environments
     uses: nicks-world/cicd-manager/.github/workflows/promote.yml@main
     with:
       system-name: %SYSTEM_NAME%
