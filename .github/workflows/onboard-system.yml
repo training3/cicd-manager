@@ -68,7 +68,6 @@ jobs:
         run: |
           set -ex
           git rm -r ${WORKING_DIR}/.github 2> /dev/null || :
-          rm -rf ${WORKING_DIR}/.github
           cp -R ${CICD_REPO_MGR_DIR}/.github-app-template ${WORKING_DIR}/.github
 
           find ${WORKING_DIR}/.github/workflows/ -type f \( -iname \*.yml -o -iname \*.yaml \) \
