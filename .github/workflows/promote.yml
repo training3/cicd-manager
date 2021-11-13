@@ -9,9 +9,13 @@ on:
         required: false
         type: string
         default: '["dev"]'
+      cluster:
+        required: false
+        type: string
+        default: dev
 jobs:
   deploy-to-env:
-    runs-on: test.mdw.nicks.world
+    runs-on: ${{ inputs.cluster }}.mdw.nicks.world
     strategy:
       max-parallel: 1
       matrix:

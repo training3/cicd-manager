@@ -13,6 +13,7 @@ jobs:
     uses: nicks-world/cicd-manager/.github/workflows/promote.yml@main
     with:
       system-name: %SYSTEM_NAME%
+      cluster: dev
   gather-test-environments:
     needs: deploy-to-dev
     runs-on: build.mdw.nicks.world
@@ -51,3 +52,4 @@ jobs:
     with:
       system-name: %SYSTEM_NAME%
       environments: ${{ needs.gather-test-environments.outputs.test-environments }}
+      cluster: test
