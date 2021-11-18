@@ -14,7 +14,7 @@ async function run(): Promise<void> {
 
     core.info(`Executing RUN STEP ${codebase}/${stepName}.sh`);
     exec.exec('echo $(set | grep GITHUB)');
-    exec.exec(command);
+    //exec.exec(command);
 }
 
 try {
