@@ -23,7 +23,7 @@ async function run(): Promise<void> {
 
     core.info(`Executing RUN STEP ${codebase}/${stepName}.sh`);
     await exec.exec('echo $PATH', [], options);
-    await exec.exec('set | grep GITHUB', [], options);
+    await exec.exec("bash -c 'set | grep GITHUB'", [], options);
     await exec.exec(command, [], options);
 }
 
