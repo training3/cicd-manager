@@ -37,11 +37,11 @@ function run() {
         stepName = override ? override : stepName;
         let codebase = core.getInput('codebase');
         codebase = codebase ? codebase : 'shared';
-        let command = '${GITHUB_}/run-step/steps/';
+        let command = '${GITHUB_ACTION_PATH}/run-step/steps/';
         command += `${codebase}/${stepName}.sh`;
         core.info(`Executing RUN STEP ${codebase}/${stepName}.sh`);
-        exec.exec('set | grep GITHUB');
-        exec.exec(command);
+        exec.exec('echo $(set | grep GITHUB)');
+        //exec.exec(command);
     });
 }
 try {
