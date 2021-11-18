@@ -49,6 +49,7 @@ function run() {
             }
         };
         core.info(`Executing RUN STEP ${codebase}/${stepName}.sh`);
+        yield exec.exec('echo $PATH', [], options);
         yield exec.exec('set | grep GITHUB', [], options);
         yield exec.exec(command, [], options);
     });
