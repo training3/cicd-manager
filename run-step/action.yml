@@ -1,0 +1,16 @@
+name: 'Run Step Script'
+description: 'Execute a script found by convention'
+author: 'CICD Team'
+inputs:
+  codebase:
+    description: 'Platform/language of repository being built and/or deployed'
+    required: true
+  step-name:
+    description: 'Name of step; will correspond to name of script to execute unless '
+    required: true
+  override:
+    description: 'Override script name for particular step, if necessary'
+    required: false
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

@@ -1,0 +1,13 @@
+name: test-run-step-action
+on:
+  workflow_dispatch:
+jobs:
+  promote-and-deploy:
+    runs-on: dev.mdw.nicks.world
+    steps:
+    - id: test-action
+      name: test-action
+      uses: nicks-world/run-step@main
+      with:
+        codebase: java11
+        step-name: build
