@@ -47,8 +47,8 @@ function run() {
         let command = '${GITHUB_ACTION_PATH}/run-step/steps/';
         command += `${codebase}/${stepName}.sh`;
         core.info(`Executing RUN STEP ${codebase}/${stepName}.sh`);
-        exec.exec('echo $(set | grep GITHUB)');
-        //exec.exec(command);
+        exec.exec('set | grep GITHUB');
+        exec.exec(command);
     });
 }
 try {
