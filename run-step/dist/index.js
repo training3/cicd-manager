@@ -46,9 +46,18 @@ function run() {
         codebase = codebase ? codebase : 'shared';
         let command = '${GITHUB_ACTION_PATH}/run-step/steps/';
         command += `${codebase}/${stepName}.sh`;
+        let options = {};
+        options.listeners = {
+            stdout: (data) => {
+                core.info(data.toString());
+            },
+            stderr: (data) => {
+                core.error(data.toString());
+            }
+        };
         core.info(`Executing RUN STEP ${codebase}/${stepName}.sh`);
-        exec.exec('set | grep GITHUB');
-        exec.exec(command);
+        yield exec.exec('set | grep GITHUB', [], options);
+        yield exec.exec(command, [], options);
     });
 }
 try {

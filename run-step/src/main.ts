@@ -11,10 +11,19 @@ async function run(): Promise<void> {
     let command  = '${GITHUB_ACTION_PATH}/run-step/steps/'
     command += `${codebase}/${stepName}.sh`;
 
+    let options:exec.ExecOptions = {};
+    options.listeners = {
+        stdout: (data: Buffer) => {
+            core.info(data.toString());
+        },
+        stderr: (data: Buffer) => {
+            core.error(data.toString());
+        }
+    };
 
     core.info(`Executing RUN STEP ${codebase}/${stepName}.sh`);
-    exec.exec('set | grep GITHUB');
-    exec.exec(command);
+    await exec.exec('set | grep GITHUB', [], options);
+    await exec.exec(command, [], options);
 }
 
 try {
