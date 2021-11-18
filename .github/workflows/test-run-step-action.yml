@@ -7,7 +7,7 @@ jobs:
     steps:
     - id: test-action
       name: test-action
-      uses: nicks-world/run-step@main
+      uses: nicks-world/cicd-manager/run-step@main
       with:
         codebase: java11
         step-name: build
