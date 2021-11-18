@@ -12,5 +12,5 @@ inputs:
     description: 'Override script name for particular step, if necessary'
     required: false
 runs:
-  using: 'node16'
+  using: 'node12'
   main: 'dist/index.js'
