@@ -14,6 +14,7 @@ runs:
     - id: run-step-script
       shell: bash
       run: |
+          set -x
           OVERRIDE_PREFIX=__overrides_
           echo "OVERRIDE_PREFIX=${OVERRIDE_PREFIX}" >> ${GITHUB_ENV}
           
