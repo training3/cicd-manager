@@ -23,7 +23,7 @@ runs:
               if [[ ${OVERRIDE_STEP_NAME} != 'null' ]]
               then
                 echo "Step ${STEP_NAME} overridden by ${OVERRIDE_STEP_NAME}"
-                STEP_NAME=OVERRIDE_STEP_NAME
+                STEP_NAME=${OVERRIDE_STEP_NAME}
               fi
           fi
 
