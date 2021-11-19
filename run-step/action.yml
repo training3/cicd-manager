@@ -22,4 +22,4 @@ runs:
           then
               STEP_NAME=${{ inputs.override }}
           fi
-          ${GITHUB_ACTION_PATH}/run-step/steps/${{ inputs.label }}/${STEP_NAME}
+          ${GITHUB_ACTION_PATH}/run-step/steps/${{ inputs.label }}/${STEP_NAME}.sh
