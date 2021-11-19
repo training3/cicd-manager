@@ -59,17 +59,17 @@ jobs:
       name: build-image
       uses: nicks-world/cicd-manager/run-step@main
       with:
-        label: shared
+        label: image
         step-name: build-image
     - id: scan-image
       name: scan-image
       uses: nicks-world/cicd-manager/run-step@main
       with:
-        label: shared
+        label: image
         step-name: scan-image
     - id: push-image
       name: push-image
       uses: nicks-world/cicd-manager/run-step@main
       with:
-        label: shared
+        label: image
         step-name: push-image
