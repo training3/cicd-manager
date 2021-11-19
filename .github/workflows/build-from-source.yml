@@ -51,26 +51,31 @@ jobs:
         step-name: build
     - id: test
       name: test
+      uses: nicks-world/cicd-manager/run-step@main
       with:
         label: ${{ steps.parse-system-def.outputs.codebase }}
         step-name: test
     - id: scan
       name: scan
+      uses: nicks-world/cicd-manager/run-step@main
       with:
         label: ${{ steps.parse-system-def.outputs.codebase }}
         step-name: scan
     - id: build-image
       name: build-image
+      uses: nicks-world/cicd-manager/run-step@main
       with:
         label: shared
         step-name: build-image
     - id: scan-image
       name: scan-image
+      uses: nicks-world/cicd-manager/run-step@main
       with:
         label: shared
         step-name: scan-image
     - id: push-image
       name: push-image
+      uses: nicks-world/cicd-manager/run-step@main
       with:
         label: shared
         step-name: push-image
