@@ -31,6 +31,9 @@ jobs:
       with:
         label: infra
         step-name: parse-system-def
+    - id: testing
+      run: | 
+        echo "CODEBASE: ${{ steps.parse-system-def.outputs.codebase }}"
     - id: clone-app-repo
       name: clone-app-repo
       uses: actions/checkout@v2
