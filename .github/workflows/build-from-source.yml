@@ -31,9 +31,6 @@ jobs:
       with:
         label: infra
         step-name: parse-system-def
-    - id: testing
-      run: | 
-        echo "CODEBASE: ${{ steps.parse-system-def.outputs.codebase }}"
     - id: clone-app-repo
       name: clone-app-repo
       uses: actions/checkout@v2
@@ -44,19 +41,19 @@ jobs:
       name: build
       uses: nicks-world/cicd-manager/run-step@main
       with:
-        label: ${{ steps.parse-system-def.outputs.codebase }}
+        label: ${{ env.CODEBASE }}
         step-name: build
     - id: test
       name: test
       uses: nicks-world/cicd-manager/run-step@main
       with:
-        label: ${{ steps.parse-system-def.outputs.codebase }}
+        label: ${{ env.CODEBASE }}
         step-name: test
     - id: scan
       name: scan
       uses: nicks-world/cicd-manager/run-step@main
       with:
-        label: ${{ steps.parse-system-def.outputs.codebase }}
+        label: ${{ env.CODEBASE }}
         step-name: scan
     - id: build-image
       name: build-image
