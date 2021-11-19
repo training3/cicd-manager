@@ -8,7 +8,6 @@ components:
     status: active
     overrides:
       test: jest
-      build: gradle
 test-environments:
   - qa
   - uat

@@ -15,7 +15,7 @@ runs:
       shell: bash
       run: |
           STEP_NAME=${{ inputs.step-name }}
-          OVERRIDE_STEP_NAME=$(eval echo \${${OVERRIDE_PREFIX}${STEPNAME}}
+          OVERRIDE_STEP_NAME=$(eval echo \${${OVERRIDE_PREFIX}${STEPNAME}})
           if [[ ! -z ${OVERRIDE_STEP_NAME} ]]
           then
               STEP_NAME=${OVERRIDE_STEP_NAME}
