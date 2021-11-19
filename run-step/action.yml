@@ -14,15 +14,17 @@ runs:
     - id: run-step-script
       shell: bash
       run: |
-          set -x
-          OVERRIDE_PREFIX=__overrides_
-          echo "OVERRIDE_PREFIX=${OVERRIDE_PREFIX}" >> ${GITHUB_ENV}
-          
+          set -x          
           STEP_NAME='${{ inputs.step-name }}'
-          OVERRIDE_STEP_NAME=$(eval echo \${${OVERRIDE_PREFIX}${STEP_NAME}})
-          if [[ ! -z ${OVERRIDE_STEP_NAME} ]]
+
+          if [[ ! -z ${COMPONENT_NAME} ]]
           then
-              STEP_NAME=${OVERRIDE_STEP_NAME}
+              OVERRIDE_STEP_NAME=echo ${OVERRIDES} | $(yq e '.${{ inputs.step-name }}' -)
+              if [[ ${OVERRIDE_STEP_NAME} == 'null' ]]
+              then
+                echo "Step ${STEP_NAME} overridden by ${OVERRIDE_STEP_NAME}"
+                STEP_NAME=OVERRIDE_STEP_NAME
+              fi
           fi
 
           if [[ -f ${WORKING_DIR}/.github/steps/${{ inputs.label }}/${STEP_NAME}.sh ]]
