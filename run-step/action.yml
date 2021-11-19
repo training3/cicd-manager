@@ -22,4 +22,10 @@ runs:
           then
               STEP_NAME=${{ inputs.override }}
           fi
-          ${GITHUB_ACTION_PATH}/steps/${{ inputs.label }}/${STEP_NAME}.sh
+
+          if [[ -f ${WORKING_DIR}/.github/steps/${{ inputs.label }}/${STEP_NAME}.sh ]]
+          then
+              ${WORKING_DIR}/.github/overrides/${{ inputs.label }}/${STEP_NAME}.sh
+          else
+              ${GITHUB_ACTION_PATH}/steps/${{ inputs.label }}/${STEP_NAME}.sh
+          fi

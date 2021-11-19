@@ -1,5 +1,5 @@
 #!/usr/bin/bash
 
 echo 
-echo 'Running the build...'
+echo 'Running the java11 build...'
 echo

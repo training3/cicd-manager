@@ -45,31 +45,32 @@ jobs:
         path: ${{ env.WORKING_DIR }}
     - id: build
       name: build
-      run: |
-        echo
-        echo "building using ${{ steps.parse-system-defs.outputs.codebase}}..."
+      uses: nicks-world/cicd-manager/run-step@main
+      with:
+        label: ${{ steps.parse-system-def.outputs.codebase }}
+        step-name: build
     - id: test
       name: test
-      run: |
-        echo
-        echo "testing..."
+      with:
+        label: ${{ steps.parse-system-def.outputs.codebase }}
+        step-name: test
     - id: scan
       name: scan
-      run: |
-        echo
-        echo "scanning..."
+      with:
+        label: ${{ steps.parse-system-def.outputs.codebase }}
+        step-name: scan
     - id: build-image
       name: build-image
-      run: |
-        echo
-        echo "building image..."
+      with:
+        label: shared
+        step-name: build-image
     - id: scan-image
       name: scan-image
-      run: |
-        echo
-        echo "scanning image..."
+      with:
+        label: shared
+        step-name: scan-image
     - id: push-image
       name: push-image
-      run: |
-        echo
-        echo "pushing image..."
+      with:
+        label: shared
+        step-name: push-image
