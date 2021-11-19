@@ -4,7 +4,7 @@ components:
     codebase: java11
     status: active
   - repo: cicd-poc-app-2
-    codebase: java11
+    codebase: node16
     status: active
 test-environments:
   - qa
