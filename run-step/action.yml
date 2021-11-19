@@ -17,7 +17,7 @@ runs:
           OVERRIDE_PREFIX=__overrides_
           echo "OVERRIDE_PREFIX=${OVERRIDE_PREFIX}" >> ${GITHUB_ENV}
           
-          STEP_NAME=${{ inputs.step-name }}
+          STEP_NAME='${{ inputs.step-name }}'
           OVERRIDE_STEP_NAME=$(eval echo \${${OVERRIDE_PREFIX}${STEP_NAME}})
           if [[ ! -z ${OVERRIDE_STEP_NAME} ]]
           then
