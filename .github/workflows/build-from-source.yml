@@ -13,15 +13,10 @@ jobs:
     steps:
     - id: setup-environment
       name: setup-environment
-      run: |
-        set -x
-        echo "CICD_REPO_MGR_DIR=${GITHUB_WORKSPACE}/cicd-manager" >> ${GITHUB_ENV}
-        echo "SYSTEM_DEFS_DIR=${GITHUB_WORKSPACE}/cicd-manager/.github/system-defs" >> ${GITHUB_ENV}
-        echo "WORKING_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY}" >> ${GITHUB_ENV}
-        set +x
-
-        echo ::add-mask::$(cat /var/secrets/PAT_TOKEN)
-        echo "PAT_TOKEN=$(cat /var/secrets/PAT_TOKEN)" >> ${GITHUB_ENV}
+      uses: nicks-world/cicd-manager/run-step@main
+      with:
+        label: infra
+        step-name: setup-environment
     - id: clone-cicd-manager-repo
       name: clone-cicd-manager-repo
       uses: actions/checkout@v2
@@ -32,12 +27,10 @@ jobs:
         token: ${{ env.PAT_TOKEN }}
     - id: parse-system-def
       name: parse-system-def
-      run: |
-        SYSTEM_DEFS_FILE=$(ls ${SYSTEM_DEFS_DIR}/${SYSTEM_NAME}.y*)
-        COMPONENT_NAME=$(basename ${WORKING_DIR})
-        CODEBASE=$(yq e ".components[] | select(.repo == \"${COMPONENT_NAME}\") | .codebase" ${SYSTEM_DEFS_FILE})
-        echo "CODEBASE: ${CODEBASE}"
-        echo ::set-output name=codebase::$(echo ${CODEBASE})
+      uses: nicks-world/cicd-manager/run-step@main
+      with:
+        label: infra
+        step-name: parse-system-def
     - id: clone-app-repo
       name: clone-app-repo
       uses: actions/checkout@v2
