@@ -30,3 +30,4 @@ runs:
           else
               ${GITHUB_ACTION_PATH}/steps/${{ inputs.label }}/${STEP_NAME}.sh
           fi
+          set +x
