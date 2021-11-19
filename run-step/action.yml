@@ -14,8 +14,11 @@ runs:
     - id: run-step-script
       shell: bash
       run: |
+          OVERRIDE_PREFIX=__overrides_
+          echo "OVERRIDE_PREFIX=${OVERRIDE_PREFIX}" >> ${GITHUB_ENV}
+          
           STEP_NAME=${{ inputs.step-name }}
-          OVERRIDE_STEP_NAME=$(eval echo \${${OVERRIDE_PREFIX}${STEPNAME}})
+          OVERRIDE_STEP_NAME=$(eval echo \${${OVERRIDE_PREFIX}${STEP_NAME}})
           if [[ ! -z ${OVERRIDE_STEP_NAME} ]]
           then
               STEP_NAME=${OVERRIDE_STEP_NAME}

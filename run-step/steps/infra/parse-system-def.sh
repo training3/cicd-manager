@@ -7,9 +7,6 @@ COMPONENT_NAME=$(basename ${WORKING_DIR})
 CODEBASE=$(yq e ".components[] | select(.repo == \"${COMPONENT_NAME}\") | .codebase" ${SYSTEM_DEFS_FILE})
 echo "CODEBASE=${CODEBASE}" >> ${GITHUB_ENV}
 
-
-OVERRIDE_PREFIX=__overrides_
-
 YQ_EXPR=".components[] | select(.repo == \"${COMPONENT_NAME}\") | .overrides | to_entries | .[] | \
          \"${OVERRIDE_PREFIX}\" + .key + \"=\" + (.value | ..style=\"single\")"
 
