@@ -68,10 +68,20 @@ jobs:
         run: |
           set -ex
           
-          cp ${WORKING_DIR}/.github/overrides /tmp
+          if [[ -d ${WORKING_DIR}/.github/overrides ]]
+          then
+              echo 'Preserving local repo CICD overrides...'
+              cp ${WORKING_DIR}/.github/overrides /tmp
+          fi
+          
           rm -rf ${WORKING_DIR}/.github
           cp -R ${CICD_REPO_MGR_DIR}/.github-app-template ${WORKING_DIR}/.github
-          cp /tmp/overrides ${WORKING_DIR}/.github
+
+          if [[ -d /tmp/overrides ]]
+          then
+              echo 'Restoring local repo CICD overrides...'
+              cp ${WORKING_DIR}/.github/overrides /tmp
+          fi
 
           find ${WORKING_DIR}/.github/workflows/ -type f \( -iname \*.yml -o -iname \*.yaml \) \
             -exec sed -i -e's/%SYSTEM_NAME%/${{ github.event.inputs.system-name }}/g' {} +
