@@ -6,6 +6,9 @@ components:
   - repo: cicd-poc-app-2
     codebase: node16
     status: active
+    overrides:
+      test: jest
+      build: gradle
 test-environments:
   - qa
   - uat

@@ -8,9 +8,6 @@ inputs:
   step-name:
     description: 'Name of step; will correspond to name of script to execute unless override is set'
     required: true
-  override:
-    description: 'Override script name for particular step, if necessary'
-    required: false
 runs:
   using: 'composite'
   steps:
@@ -18,9 +15,10 @@ runs:
       shell: bash
       run: |
           STEP_NAME=${{ inputs.step-name }}
-          if [[ ! -z '${{ inputs.override }}' ]]
+          OVERRIDE_STEP_NAME=$(eval echo \${${OVERRIDE_PREFIX}${STEPNAME}}
+          if [[ ! -z ${OVERRIDE_STEP_NAME} ]]
           then
-              STEP_NAME=${{ inputs.override }}
+              STEP_NAME=${OVERRIDE_STEP_NAME}
           fi
 
           if [[ -f ${WORKING_DIR}/.github/steps/${{ inputs.label }}/${STEP_NAME}.sh ]]
