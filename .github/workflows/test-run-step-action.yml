@@ -2,12 +2,12 @@ name: test-run-step-action
 on:
   workflow_dispatch:
 jobs:
-  promote-and-deploy:
+  testing-action:
     runs-on: dev.mdw.nicks.world
     steps:
     - id: test-action
       name: test-action
       uses: nicks-world/cicd-manager/run-step@main
       with:
-        codebase: java11
+        label: java11
         step-name: build

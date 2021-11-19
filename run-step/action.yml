@@ -1,16 +1,25 @@
-name: 'Run Step Script'
+name: 'Dynamic Script Runner'
 description: 'Execute a script found by convention'
 author: 'CICD Team'
 inputs:
-  codebase:
+  label:
     description: 'Platform/language of repository being built and/or deployed'
     required: true
   step-name:
-    description: 'Name of step; will correspond to name of script to execute unless '
+    description: 'Name of step; will correspond to name of script to execute unless override is set'
     required: true
   override:
     description: 'Override script name for particular step, if necessary'
     required: false
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'composite'
+  steps:
+    - id: run-step-script
+      shell: bash
+      run: |
+          STEP_NAME=${{ inputs.step-name }}
+          if [[ ! -z '${{ inputs.override }}' ]]
+          then
+              STEP_NAME=${{ inputs.override }}
+          fi
+          ${GITHUB_ACTION_PATH}/run-step/steps/${{ inputs.label }}/${STEP_NAME}
