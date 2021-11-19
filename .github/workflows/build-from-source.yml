@@ -33,10 +33,12 @@ jobs:
     - id: parse-system-def
       name: parse-system-def
       run: |
+        set -x
         SYSTEM_DEFS_FILE=$(ls ${SYSTEM_DEFS_DIR}/${SYSTEM_NAME}.y*)
         CODEBASE=$(yq e ".components[] | select(.repo == \"${SYSTEM_NAME}\") | .codebase" ${SYSTEM_DEFS_FILE})
         echo "CODEBASE: ${CODEBASE}"
         echo ::set-output name=codebase::$(echo ${CODEBASE})
+        set +x
     - id: clone-app-repo
       name: clone-app-repo
       uses: actions/checkout@v2
