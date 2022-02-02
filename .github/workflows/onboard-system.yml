@@ -10,7 +10,11 @@ on:
         required: true
 jobs:
   gather-system-info:
-    runs-on: [build.mdw.nicks.world, ${{ github.event.inputs.team-name }}]
+    runs-on: [${{ matrix.runner }}, ${{ matrix.team-name }}]
+    strategy:
+      matrix:
+        runner: [build.mdw.nicks.world]
+        team-name: [${{ github.event.inputs.team-name }}]
     steps:
     - id: setup-environment
       name: setup-environment
