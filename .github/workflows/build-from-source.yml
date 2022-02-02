@@ -5,9 +5,12 @@ on:
       system-name:
         required: true
         type: string
+      team-name:
+        required: true
+        type: string
 jobs:
   build-to-image:
-    runs-on: build.mdw.nicks.world
+    runs-on: [build.mdw.nicks.world, "${{ github.event.inputs.team-name }}"]
     env:
       SYSTEM_NAME: ${{ inputs.system-name }}
     steps:

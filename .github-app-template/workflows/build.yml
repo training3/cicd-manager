@@ -8,15 +8,17 @@ jobs:
     uses: nicks-world/cicd-manager/.github/workflows/build-from-source.yml@main
     with:
       system-name: %SYSTEM_NAME%
+      team-name: %TEAM_NAME%
   deploy-to-dev:
     needs: build-from-source
     uses: nicks-world/cicd-manager/.github/workflows/promote.yml@main
     with:
       system-name: %SYSTEM_NAME%
+      team-name: %TEAM_NAME%
       cluster: dev
   gather-test-environments:
     needs: deploy-to-dev
-    runs-on: build.mdw.nicks.world
+    runs-on: [build.mdw.nicks.world, %TEAM_NAME%]
     steps:
     - id: setup-environment
       name: setup-environment
@@ -51,5 +53,5 @@ jobs:
     uses: nicks-world/cicd-manager/.github/workflows/promote.yml@main
     with:
       system-name: %SYSTEM_NAME%
+      system-name: %TEAM_NAME%
       environments: ${{ needs.gather-test-environments.outputs.test-environments }}
-      cluster: test

@@ -5,17 +5,16 @@ on:
       system-name:
         required: true
         type: string
+      team-name:
+        required: true
+        type: string
       environments:
         required: false
         type: string
         default: '["dev"]'
-      cluster:
-        required: false
-        type: string
-        default: dev
 jobs:
   promote-and-deploy:
-    runs-on: ${{ inputs.cluster }}.mdw.nicks.world
+    runs-on: [ build.mdw.nicks.world, "${{ github.event.inputs.team-name }}"]
     strategy:
       max-parallel: 1
       matrix:

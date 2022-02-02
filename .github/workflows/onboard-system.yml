@@ -87,7 +87,8 @@ jobs:
           fi
 
           find ${WORKING_DIR}/.github/workflows/ -type f \( -iname \*.yml -o -iname \*.yaml \) \
-            -exec sed -i -e's/%SYSTEM_NAME%/${{ github.event.inputs.system-name }}/g' {} +
+            -exec sed -i -e's/%SYSTEM_NAME%/${{ github.event.inputs.system-name }}/g' \
+                         -e's/%TEAM_NAME%/${{ github.event.inputs.system-name }}/g' {} +
           git -C ${WORKING_DIR} add -u
 
           if [[ ! -z "$(git -C ${WORKING_DIR} status --porcelain)" ]]
