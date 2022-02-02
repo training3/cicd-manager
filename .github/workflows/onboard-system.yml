@@ -13,8 +13,8 @@ jobs:
     runs-on: ["${{ matrix.runner }}", "${{ matrix.team-name }}"]
     strategy:
       matrix:
-        runner: build.mdw.nicks.world
-        team-name: ${{ github.event.inputs.team-name }}
+        runner: [build.mdw.nicks.world]
+        team-name: ["${{ github.event.inputs.team-name }}"]
     steps:
     - id: setup-environment
       name: setup-environment
