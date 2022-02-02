@@ -1,4 +1,5 @@
 organization: nicks-world
+team: teama
 components:
   - repo: cicd-poc-app-1
     codebase: java11

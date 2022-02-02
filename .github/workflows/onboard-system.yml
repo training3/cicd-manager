@@ -6,7 +6,7 @@ on:
         description: 'system-name: Name of the system to be onboarded and managed by the CICD system'
         required: true
       team-name:
-        description: 'system-name: Name of the system to be onboarded and managed by the CICD system'
+        description: 'team-name: Name of the team the system belongs to; determines proper namespace to run in'
         required: true
 jobs:
   gather-system-info:
