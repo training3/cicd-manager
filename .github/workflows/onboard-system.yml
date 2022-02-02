@@ -10,7 +10,7 @@ on:
         required: true
 jobs:
   gather-system-info:
-    runs-on: [${{ matrix.runner }}, ${{ matrix.team-name }}]
+    runs-on: ["${{ matrix.runner }}", "${{ matrix.team-name }}"]
     strategy:
       matrix:
         runner: build.mdw.nicks.world
