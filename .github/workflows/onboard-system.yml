@@ -41,7 +41,7 @@ jobs:
       component-repos: ${{ steps.parse-system-def.outputs.component-repos }}
       CICD_REPO_MGR_DIR: ${{ env.CICD_REPO_MGR_DIR }}
   onboard-system:
-    runs-on: [build.mdw.nicks.world, ${{ github.event.inputs.team-name }}]
+    runs-on: ["${{ matrix.runner }}", "${{ matrix.team-name }}"]
     needs: gather-system-info
     env:
       CICD_REPO_MGR_DIR: ${{ needs.gather-system-info.outputs.CICD_REPO_MGR_DIR }}
