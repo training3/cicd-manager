@@ -5,9 +5,12 @@ on:
       system-name:
         description: 'system-name: Name of the system to be onboarded and managed by the CICD system'
         required: true
+      team-name:
+        description: 'system-name: Name of the system to be onboarded and managed by the CICD system'
+        required: true
 jobs:
   gather-system-info:
-    runs-on: build.mdw.nicks.world
+    runs-on: [build.mdw.nicks.world, ${{ github.event.inputs.team-name }}]
     steps:
     - id: setup-environment
       name: setup-environment
@@ -34,7 +37,7 @@ jobs:
       component-repos: ${{ steps.parse-system-def.outputs.component-repos }}
       CICD_REPO_MGR_DIR: ${{ env.CICD_REPO_MGR_DIR }}
   onboard-system:
-    runs-on: build.mdw.nicks.world
+    runs-on: [build.mdw.nicks.world, ${{ github.event.inputs.team-name }}]
     needs: gather-system-info
     env:
       CICD_REPO_MGR_DIR: ${{ needs.gather-system-info.outputs.CICD_REPO_MGR_DIR }}
@@ -67,20 +70,20 @@ jobs:
         name: install-github-workflow-directory
         run: |
           set -ex
-          
+
           if [[ -d ${WORKING_DIR}/.github/overrides ]]
           then
               echo 'Preserving local repo CICD overrides...'
               cp ${WORKING_DIR}/.github/overrides /tmp
           fi
-          
+
           rm -rf ${WORKING_DIR}/.github
           cp -R ${CICD_REPO_MGR_DIR}/.github-app-template ${WORKING_DIR}/.github
 
           if [[ -d /tmp/overrides ]]
           then
               echo 'Restoring local repo CICD overrides...'
-              cp ${WORKING_DIR}/.github/overrides /tmp
+              cp /tmp/overrides ${WORKING_DIR}/.github
           fi
 
           find ${WORKING_DIR}/.github/workflows/ -type f \( -iname \*.yml -o -iname \*.yaml \) \
@@ -91,7 +94,7 @@ jobs:
           then
               git -C ${WORKING_DIR} config user.email ${cicd-team@my-org.com}
               git -C ${WORKING_DIR} config user.name ${GITHUB_ACTOR}
-              git -C ${WORKING_DIR} add -A 
+              git -C ${WORKING_DIR} add -A
               git -C ${WORKING_DIR} commit -am 'installing latest cicd-poc-mgr GitHub Action Workflow(s)'
               git -C ${WORKING_DIR} push
           else
