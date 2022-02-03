@@ -15,7 +15,6 @@ jobs:
     with:
       system-name: %SYSTEM_NAME%
       team-name: %TEAM_NAME%
-      cluster: dev
   gather-test-environments:
     needs: deploy-to-dev
     runs-on: [build.mdw.nicks.world, %TEAM_NAME%]
