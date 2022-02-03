@@ -14,7 +14,7 @@ on:
         default: '["dev"]'
 jobs:
   promote-and-deploy:
-    runs-on: [ build.mdw.nicks.world, "${{ github.event.inputs.team-name }}"]
+    runs-on: [ build.mdw.nicks.world, "${{ inputs.team-name }}"]
     strategy:
       max-parallel: 1
       matrix:
