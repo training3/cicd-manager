@@ -1,10 +1,10 @@
 organization: nicks-world
 team: teamb
 components:
-  - repo: cicd-poc-app-1b
+  - repo: cicd-poc-app-1
     codebase: java11
     status: active
-  - repo: cicd-poc-app-2b
+  - repo: cicd-poc-app-2
     codebase: node16
     status: active
     overrides:
