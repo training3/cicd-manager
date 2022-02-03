@@ -53,5 +53,5 @@ jobs:
     uses: nicks-world/cicd-manager/.github/workflows/promote.yml@main
     with:
       system-name: %SYSTEM_NAME%
-      system-name: %TEAM_NAME%
+      team-name: %TEAM_NAME%
       environments: ${{ needs.gather-test-environments.outputs.test-environments }}
