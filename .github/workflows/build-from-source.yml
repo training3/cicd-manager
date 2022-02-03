@@ -10,7 +10,7 @@ on:
         type: string
 jobs:
   build-to-image:
-    runs-on: [build.mdw.nicks.world, "${{ github.event.inputs.team-name }}"]
+    runs-on: [build.mdw.nicks.world, "${{ inputs.team-name }}"]
     env:
       SYSTEM_NAME: ${{ inputs.system-name }}
     steps:
