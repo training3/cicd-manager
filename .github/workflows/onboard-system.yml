@@ -83,7 +83,7 @@ jobs:
             -exec sed -i -e's/%SYSTEM_NAME%/${SYSTEM_NAME}/g' \
                          -e's/%TEAM_NAME%/${TEAM_NAME}/g' {} +
 
-          cp -R ${CICD_REPO_MGR_DIR}/.github-app-template ${WORKING_DIR}/.github
+          cp -RT ${CICD_REPO_MGR_DIR}/.github-app-template ${WORKING_DIR}/.github
 
           git -C ${WORKING_DIR} add -u
           if [[ ! -z "$(git -C ${WORKING_DIR} status --porcelain)" ]]
