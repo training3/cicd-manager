@@ -1,4 +1,4 @@
-= CICD Management for the Organization
+= CICD Management for the Organization 
 
 This document will summarize the design and concepts around a group of GitHub Actions workflows that will fulfill the following goals:
 
