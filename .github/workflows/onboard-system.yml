@@ -10,7 +10,7 @@ on:
         required: true
 jobs:
   gather-system-info:
-    runs-on: [build.mdw.nicks.world, "${{ github.event.inputs.team-name }}"]
+    runs-on: [ubuntu-latest, "${{ github.event.inputs.team-name }}"]
     steps:
     - id: setup-environment
       name: setup-environment
